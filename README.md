@@ -39,6 +39,7 @@ To deploy MoFaCTs, follow the standard procedure for Docker Compose systems:
 A Vagrantfile is provided in this repository along with a provisioning script that sets up all the requirements. To use it:
 
 1. Run the following commands: vagrant up && vagrant ssh
-2. In your host browser, navigate to `localhost:3000`.
+2. Follow the instructions in the welcome message.
+3. In your host browser, navigate to `localhost:3000`.
 
 Feel free to explore and test the MoFaCTs system using the provided Vagrant setup for a hassle-free testing experience.
