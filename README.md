@@ -14,11 +14,17 @@ MoFaCTS-Mini is a more cost-effective version of the system that sacrifices auth
 - 3GB RAM (for MoFaCTS-Mini)
 - 64GB RAM (for MoFaCTS-Full)
 
-## Software Requirements
+## Software Requirements (Remote)
 
 - Linux Server running a modern distribution, such as Ubuntu
 - Docker
 - Docker Compose
+
+## Software Requirements (Local)
+
+- Windows 10, Linux, or Mac OSX
+- Vagrant
+- Virtualbox
 
 ## Deployment
 
