@@ -1,29 +1,38 @@
 # MoFaCTs Docker
-MoFaCTS is a Meteor.js driven, responsive implementation of the FaCT System designed for use by mobile participants. This is the repository for easy testing and deployment of a pre-built using docker containers.
 
-## What is MoFACTs-Mini and MoFaCTs-Full
-MoFaCTS-Full is a full featured version of Dr. Phil Pavlik's MoFACTs system, including the subsystems for authoring new content using Machine Learning. It requires additional containers including some from Dr. Andrew Olney's docker hub repositories. It is memory intensive and has a minimal requirement of 64GB of RAM.
+MoFaCTS is an implementation of the FaCT System, powered by Meteor.js, specifically designed for mobile participants. This repository facilitates easy testing and deployment of pre-built MoFaCTs using Docker containers.
 
-MoFaCTS-Mini is a version of the same system that is designed to run at a lower cost while sacrificing authoring tools. It currently requires roughly 3GB or RAM
+## MoFACTs-Mini and MoFaCTs-Full
+
+MoFaCTS-Full is the comprehensive version of Dr. Phil Pavlik's MoFACTs system, which includes authoring tools utilizing Machine Learning. It requires additional containers from Dr. Andrew Olney's Docker Hub repositories. Due to its memory-intensive nature, it requires a minimum of 64GB RAM.
+
+MoFaCTS-Mini is a more cost-effective version of the system that sacrifices authoring tools. It currently operates with around 3GB of RAM.
 
 ## Hardware Requirements
--40GB of Free Space
--3GB RAM (Mini)
--64GB RAM (Full)
 
-## Sofware  Requirements
--Linux Server running a modern distrobution, such as Ubuntu
--Docker
--Docker-Compose
+- 40GB of available storage space
+- 3GB RAM (for MoFaCTS-Mini)
+- 64GB RAM (for MoFaCTS-Full)
 
-## Deploying
-As with all docker-compose systems, the process for deploying MoFaCTs is the same.
+## Software Requirements
 
--create /mofactsAssets folder in root directory, store your settings.json, caches, and symspell dictionaries here. Edit settings.json to show /mofactsAssets as the path and to set the administrator user.
--navigate to the directory of the docker-compose.yaml script of your choice and run:
--docker-compose up -d
+- Linux Server running a modern distribution, such as Ubuntu
+- Docker
+- Docker Compose
+
+## Deployment
+
+To deploy MoFaCTs, follow the standard procedure for Docker Compose systems:
+
+1. Create a folder named `/mofactsAssets` in the root directory. Store your `settings.json`, caches, and Symspell dictionaries in this folder. Edit `settings.json` to specify `/mofactsAssets` as the path and set the administrator user.
+2. Navigate to the directory containing the desired `docker-compose.yaml` script.
+3. Run the following command: docker-compose up -d
 
 ## Testing
--A Vagrantfile is distributed in this repository with a provisioning script that will provide all requirements. To activate it:
-vagrant up && vagrant ssh
--navigate your host browser to localhost:3000
+
+A Vagrantfile is provided in this repository along with a provisioning script that sets up all the requirements. To use it:
+
+1. Run the following commands: vagrant up && vagrant ssh
+2. In your host browser, navigate to `localhost:3000`.
+
+Feel free to explore and test the MoFaCTs system using the provided Vagrant setup for a hassle-free testing experience.
