@@ -1,0 +1,87 @@
+version: '3.2'
+
+services:
+  mofacts:
+    image: jrustyhaner/mofacts-mini
+    volumes:
+      - type: bind
+        source: /mofactsAssets
+        target: /mofactsAssets
+        bind:
+          propagation: shared
+          create_host_path: true
+    ports:
+      - '80:3000'
+    depends_on:
+      - mongo
+      - syllables
+      - longformQA
+      - semanticRoleLabeler
+      - wikifier
+      - sents
+      - spacy
+      - allennlp
+    environment:
+      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
+      MONGO_URL: mongodb://mongo:27017/MoFACT
+      PORT: 3000
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  mongo:
+    image: mongo:latest
+    command:
+      - --storageEngine=wiredTiger
+    volumes:
+      - data:/data/db
+
+  syllables:
+    image: jrustyhaner/mofacts-syllables
+    ports:
+      - '4567:4567'
+
+  longformQA:
+    image: aolney/longform-qa-service
+    ports:
+      - '5000:5000'
+
+  semanticRoleLabeler:
+    image: jrustyhaner/mofacts-semantic-role-labeler
+    ports:
+      - '8000:8000'
+
+  wikifier:
+    image: aolney/illinois-wikifier-server
+    ports:
+      - '8800:8800'
+
+  sents:
+    image: jrustyhaner/mofacts-sents
+    ports:
+      - '8001:8001'
+
+  spacy:
+    image: aolney/spacyapi:en_v2
+    ports:
+      - '8003:8003'
+
+  allennlp:
+    image:allennlp/demo:8bd9af0e71051a84454e7115ead1c963f10959bb
+    ports:
+      - '8004:8004'
+
+volumes:
+  data:
+
+

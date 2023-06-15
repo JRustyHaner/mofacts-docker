@@ -1,0 +1,22 @@
+{   
+    "logNotice": "Test Config",
+    "public": {
+        "testLogin": false
+    },
+    "owner": "<gmail account>",
+    "initRoles": {
+        "admins": ["<gmail account>","vagrant@vagrant-ubuntu-trusty-64"],
+        "teachers": []
+    },
+    "definitionalFeedbackDataLocation":"/mofactsAssets/2021-01-17-glossary-machine-dictionary-tagged.json",
+    "elaboratedFeedbackDataLocation":"/mofactsAssets/2021-02-25-elaboratedFeedbackCache.json",
+    "debug":false,
+    "frequencyDictionaryLocation":"/mofactsAssets/frequency_dictionary_en_82_765.txt",
+    "bigramDictionaryLocation": "/mofactsAssets/frequency_bigramdictionary_en_243_342.txt",
+    "syllableURL": "http://syllables:4567",
+    "SymSpell": {
+        "maxEditDistance": 1,
+        "prefixLength": 7
+    }
+}  
+  
