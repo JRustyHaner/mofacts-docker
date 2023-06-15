@@ -30,6 +30,6 @@ echo "This box allows you to test the MoFaCTs Docker containers" | sudo tee -a /
 echo "You can find the MoFaCTs Docker containers at /mofacts-full and /mofacts-mini" | sudo tee -a /etc/motd
 echo "You can find the MoFaCTs Assets and settings.json at /mofactsAssets" | sudo tee -a /etc/motd
 echo "To start the MoFaCTs Docker containers, run the following commands:" | sudo tee -a /etc/motd
-echo "cd /mofacts-full" | sudo tee -a /etc/motd
+echo "cd /mofacts-full" or "cd /mofacts-mini" | sudo tee -a /etc/motd
 echo "docker-compose up -d" | sudo tee -a /etc/motd
 echo "============================================================" | sudo tee -a /etc/motd
