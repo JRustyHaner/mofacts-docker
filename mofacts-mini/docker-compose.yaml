@@ -34,7 +34,7 @@ services:
           memory: 256M
 
   mongo:
-    image: mongo:latest
+    image: mongo:4.4.6
     command:
       - --storageEngine=wiredTiger
     volumes:
