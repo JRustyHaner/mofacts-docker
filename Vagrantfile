@@ -13,6 +13,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 5432, host: 65432
   config.vm.network "forwarded_port", guest: 80, host: 3000, host_ip: "0.0.0.0"
   config.vm.network "forwarded_port", guest: 80, host: 80, host_ip: "0.0.0.0"
+  config.vm.boot_timeout = 600
   config.vm.synced_folder "mofacts-full/", "/vagrant/mofacts-full", owner: "vagrant", group: mofactsdocker, mount_options: ["dmode=775,fmode=775"]
   config.vm.synced_folder "mofacts-mini/", "/home/vagrant/mofacts-mini", owner: "vagrant", group: mofactsdocker, mount_options: ["dmode=775,fmode=775"]
   config.vm.synced_folder "mofactsAssets/", "/mofactsAssets", owner: "vagrant", group: mofactsdocker, mount_options: ["dmode=775,fmode=775"]

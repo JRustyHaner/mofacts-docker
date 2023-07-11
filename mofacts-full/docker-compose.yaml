@@ -50,38 +50,76 @@ services:
     image: jrustyhaner/mofacts-syllables
     ports:
       - '4567:4567'
-
-  longformQA:
-    image: aolney/longform-qa-service
-    ports:
-      - '5000:5000'
-
-  semanticRoleLabeler:
-    image: jrustyhaner/mofacts-semantic-role-labeler
-    ports:
-      - '8000:8000'
-
-  wikifier:
-    image: aolney/illinois-wikifier-server
-    ports:
-      - '8800:8800'
-
-  sents:
-    image: jrustyhaner/mofacts-sents
-    ports:
-      - '8001:8001'
-
-  spacy:
-    image: aolney/spacyapi:en_v2
-    ports:
-      - '8003:8003'
-
   allennlp:
-    image:allennlp/demo:8bd9af0e71051a84454e7115ead1c963f10959bb
+    image: allennlp/demo:8bd9af0e71051a84454e7115ead1c963f10959bb
     ports:
-      - '8004:8004'
-
+    - 8002:8000
+    restart: unless-stopped
+    # The volumes, etc below are necessary to control set_max_length and cache models. See README
+    volumes:
+    - type: bind
+      source: /mofactsAssets/allennlp
+      target: /root/.allennlp
+    command: --models-file /root/.allennlp/custom_models.json
+  #------END BASIC CLOZE SERVICES------
+  #------START PARAPHRASE SERVICES------
+  # Exposed on port 8004 on host
+  paraphrase:
+    image: aolney/paraphrase-service:1.0
+    ports:
+    - 8004:8000
+    restart: unless-stopped
+  #------END PARAPHRASE SERVICES------
+  #------START ELABORATED FEEDBACK SERVICES------
+  # Exposed on port 8003 on host
+  wikifier:
+    image: aolney/illinois-wikifier-server:1.0
+    ports:
+    - 8003:8800
+    restart: unless-stopped
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    container_name: es01
+    environment:
+      # Example parameters for an elasticsearch cluster
+      # - node.name=es01
+      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+      # - cluster.name=es-docker-cluster
+      # - discovery.seed_hosts=es02,es03
+      # - cluster.initial_master_nodes=es01,es02,es03
+      # - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
+    # ulimits:
+    #   memlock:
+    #     soft: -1
+    #     hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+    # exposing a port on the host seems to be the easiest way of getting data into the container
+      - 127.0.0.1:9200:9200 
+    networks:
+      - elastic
+    restart: unless-stopped
+  # Exposed on port 8005 on host
+  longform-qa:
+    depends_on: 
+    - es01
+    image: aolney/longform-qa-service:2.0
+    networks: 
+    - elastic
+    ports: 
+    - 8005:8000
+    restart: unless-stopped
 volumes:
-  data:
-
-
+  # data will be persisted if you "docker-compose down"
+  data01:
+    driver: local
+  # data02:
+  #   driver: local
+  # data03:
+  #   driver: local
+networks:
+  elastic:
+    driver: bridge
