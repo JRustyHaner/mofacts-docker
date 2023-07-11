@@ -119,6 +119,9 @@ volumes:
   #   driver: local
   # data03:
   #   driver: local
+  mongo:
+    driver: local
 networks:
   elastic:
     driver: bridge
+  
