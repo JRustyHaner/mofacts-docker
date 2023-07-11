@@ -47,6 +47,5 @@ services:
 
 
 volumes:
-  data:
-
-
+  mongodb:
+    driver: local
