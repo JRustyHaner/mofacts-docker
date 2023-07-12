@@ -49,6 +49,11 @@ services:
     image: jrustyhaner/mofacts-syllables
     ports:
       - '4567:4567'
+  spacy:
+    image: aolney/spacyapi:en_v2
+    ports:
+    - 8001:80
+    restart: unless-stopped
   allennlp:
     image: allennlp/demo:8bd9af0e71051a84454e7115ead1c963f10959bb
     ports:
