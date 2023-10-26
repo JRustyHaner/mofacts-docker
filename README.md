@@ -34,6 +34,66 @@ To deploy MoFaCTs, follow the standard procedure for Docker Compose systems:
 2. Navigate to the directory containing the desired `docker-compose.yaml` script.
 3. Run the following command: docker-compose up -d
 
+## Monitoring and Notifications
+
+To ensure the smooth operation of your MoFaCTs Docker deployment, it's essential to set up monitoring and notifications. You can use a custom script, `container-status-check.sh`, to periodically check the health of your containers and receive email notifications in case of issues.
+
+### Configuring `container-status-check.sh`
+
+1. Use the provided script file named `container-status-check.sh` in a directory of your choice.
+
+2. Edit the `container-status-check.sh` script and specify the MoFaCTs Docker container ID and email addresses to notify as follows:
+
+   ```bash
+        CONTAINER_ID="<mofacts container id>"
+        EMAILS=("<your email address>", "<second email address>")
+   # ...
+
+3. Install SSMTP 
+
+```bash 
+    sudo apt install ssmtp -y
+```
+
+4.  To enable email notifications, you can use ssmtp with a sample `ssmtp.conf` file, changing the file to match your email provider's credentials.
+
+```bash
+    #
+    # Config file for sSMTP sendmail
+    # Example for configuring mofacts to send emai
+    #
+    # The person who gets all mail for userids < 1000
+    # Make this empty to disable rewriting.
+    root=<email address that will send the emails>
+
+    # The place where the mail goes. The actual machine name is required no
+    # MX records are consulted. Commonly mailhosts are named mail.domain.com
+    mailhub=<outgoing mail server>:587
+
+    # Where will the mail seem to come from?
+    rewriteDomain=optimallearning.org
+
+    AuthUser=<your email username>
+    AuthPass=<your email password>
+
+    # The full hostname
+    hostname=staging
+```
+
+5. To regularly monitor your MoFaCTs Docker container, you can schedule the container-status-check.sh script as a cron job. Open your crontab configuration:
+
+```bash
+    crontab -e
+```
+
+6. Append to your configuration this entry to run once every hour, specifiying the absolute path of the script:
+```bash
+    0 * * * * /path/to/container-status-check.sh
+
+```
+
+Feel free to adjust the scheduling interval to meet your specific monitoring needs.
+
 ## Testing
 
 A Vagrantfile is provided in this repository along with a provisioning script that sets up all the requirements. To use it:

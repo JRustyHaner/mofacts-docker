@@ -2,6 +2,8 @@ version: '3.2'
 
 services:
   mofacts:
+    container_name: mofacts
+    restart: always
     image: jrustyhaner/mofacts-mini
     volumes:
       - type: bind
@@ -10,42 +12,50 @@ services:
         bind:
           propagation: shared
           create_host_path: true
+      - type: bind
+        source: /dynamic-assets
+        target: /dynamic-assets
+        bind:
+          propagation: shared
+          create_host_path: true
     ports:
       - '80:3000'
     depends_on:
-      - mongo
+      - mongodb
       - syllables
     environment:
       ROOT_URL: ${APP_ROOT_URL:-http://localhost}
-      MONGO_URL: mongodb://mongo:27017/MoFACT
+      MONGO_URL: mongodb://mongodb:27017/MoFaCT
       PORT: 3000
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
+      SYLLABLES_URL: http://syllables:4567
+      WAIT_HOSTS: mongo:27017 syllables:4567
+      METEOR_SETTINGS_WORKAROUND: '/mofactsAssets/settings.json'
+    networks:
+      - mofacts
 
-  mongo:
+  mongodb:
     image: mongo:4.4.6
     command:
       - --storageEngine=wiredTiger
     volumes:
-      - mongo:/data/db
+      - mongodb:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - mofacts
 
   syllables:
     image: jrustyhaner/mofacts-syllables
     ports:
       - '4567:4567'
+    networks:
+      - mofacts
 
 
 volumes:
   mongodb:
     driver: local
+
+networks:
+  mofacts:
+    driver: bridge

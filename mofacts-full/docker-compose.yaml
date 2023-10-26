@@ -10,6 +10,12 @@ services:
         bind:
           propagation: shared
           create_host_path: true
+        - type: bind
+        source: /dynamic-assets
+        target: /dynamic-assets
+        bind:
+          propagation: shared
+          create_host_path: true
     ports:
       - '80:80'
       - '3000:3000'
