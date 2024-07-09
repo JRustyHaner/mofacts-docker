@@ -4,20 +4,28 @@ services:
   mofacts:
     container_name: mofacts
     restart: always
-    image: jrustyhaner/mofacts-mini
+    image: iisdevs/mofacts-mini
     volumes:
       - type: bind
         source: /mofactsAssets
         target: /mofactsAssets
         bind:
-          propagation: shared
           create_host_path: true
       - type: bind
         source: /dynamic-assets
         target: /dynamic-assets
         bind:
-          propagation: shared
           create_host_path: true
+      - type: bind
+        source: /var/log/mofacts
+        target: /mofactsAssets/logs
+        bind:
+          create_host_path: true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"  # Optional, customize the maximum size of each log file (default 10m)
+        max-file: "5"   # Optional, customize the maximum number of log files (default 5)
     ports:
       - '80:3000'
     depends_on:
@@ -44,8 +52,19 @@ services:
     networks:
       - mofacts
 
+  nginx:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
   syllables:
-    image: jrustyhaner/mofacts-syllables
+    image: iisdevs/mofacts-syllables
     ports:
       - '4567:4567'
     networks:

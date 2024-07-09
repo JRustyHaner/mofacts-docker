@@ -2,20 +2,28 @@ version: '3.2'
 
 services:
   mofacts:
-    image: jrustyhaner/mofacts-mini
+    image: iisdevs/mofacts-mini:main
     volumes:
       - type: bind
         source: ../mofactsAssets
         target: /mofactsAssets
         bind:
-          propagation: shared
           create_host_path: true
-        - type: bind
+      - type: bind
         source: /dynamic-assets
         target: /dynamic-assets
         bind:
-          propagation: shared
           create_host_path: true
+      - type: bind
+        source: /var/log/mofacts
+        target: /mofactsAssets/logs
+        bind:
+          create_host_path: true
+     logging:
+        driver: json-file
+        options:
+          max-size: "10m"  # Optional, customize the maximum size of each log file (default 10m)
+          max-file: "5"   # Optional, customize the maximum number of log files (default 5)
     ports:
       - '80:80'
       - '3000:3000'
@@ -51,9 +59,20 @@ services:
       - --storageEngine=wiredTiger
     volumes:
       - mongo:/data/db
+  
+  nginx:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
 
   syllables:
-    image: jrustyhaner/mofacts-syllables
+    image: iisdevs/mofacts-syllables
     ports:
       - '4567:4567'
   spacy:
